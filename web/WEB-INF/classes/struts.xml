@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+	"-//Apache Software Foundation//DTD Struts Configuration 2.3//EN"
+	"http://struts.apache.org/dtds/struts-2.3.dtd">
+
+<struts>
+    <constant name="struts.devMode" value="true" />
+    <constant name="struts.ui.theme" value="simple" />
+    <package name="default" namespace="/" extends="json-default">
+        <interceptors>
+            <interceptor name="loginInterceptor" class="utils.interceptor.LoginInterceptor"/>
+            <interceptor name="exceptionInterceptor" class="utils.interceptor.ExceptionInterceptor"/>
+            <interceptor name="authInterceptor" class="utils.interceptor.AuthInterceptor"/>
+            <interceptor-stack name="systemStack">
+                <interceptor-ref name="exceptionInterceptor"/>
+                <interceptor-ref name="loginInterceptor"/>
+                <interceptor-ref name="authInterceptor"/>
+                <interceptor-ref name="defaultStack"/>
+            </interceptor-stack>
+        </interceptors>
+        <default-interceptor-ref name="systemStack"/>
+        <global-results>
+            <result name="login">index.jsp</result>
+            <result name="list">WEB-INF/jsps/${actionName}/list.jsp</result>
+            <result name="input">WEB-INF/jsps/${actionName}/input.jsp</result>
+            <result name="toList" type="redirectAction">${actionName}_list.action</result>
+            <result name="delete" type="redirectAction">${actionName}_list.action?pageNum=${pageNum}</result>
+            <result name="error">WEB-INF/jsps/error.jsp</result>
+
+        </global-results>
+        <action name="page_*">
+            <result>/WEB-INF/jsps/{1}.jsp</result>
+        </action>
+        <action name="context">
+            <result>WEB-INF/jsps/context.jsp</result>
+        </action>
+        <action name="emp_*" method="{1}" class="empAction">
+            <result name="loginSuccess">WEB-INF/jsps/main.jsp</result>
+            <result name="toChangePwd">WEB-INF/jsps/emp/changePwd.jsp</result>
+        </action>
+
+        <action name="dept_*" class="deptAction" method="{1}">
+
+        </action>
+        <action name="role_*" class="roleAction" method="{1}"></action>
+        <action name="res_*" class="resAction" method="{1}"></action>
+        <action name="menu_*" class="menuAction" method="{1}"></action>
+        <action name="supplier_*" class="supplierAction" method="{1}"></action>
+        <action name="goodsType_*" class="goodsTypeAction" method="{1}">
+            <result name="ajaxGetBySupplier" type="json">
+                <param name="root">action</param>
+                <param name="includeProperties">
+                    goodsTypeList\[\d+\]\.uuid,
+                    goodsTypeList\[\d+\]\.name,
+                </param>
+            </result>
+        </action>
+        <action name="goods_*" class="goodsAction" method="{1}"></action>
+        <action name="order_*" class="orderAction" method="{1}">
+            <result name="buyList">WEB-INF/jsps/order/buy/buyList.jsp</result>
+            <result name="buy" type="redirectAction">order_buyList</result>
+            <result name="buyInput">WEB-INF/jsps/order/buy/buyInput.jsp</result>
+            <result name="buyDetail">WEB-INF/jsps/order/buy/buyDetail.jsp</result>
+            <result name="ajaxGetGtmBySm" type="json">
+                <param name="root">action</param>
+                <param name="includeProperties">
+                    gtmList\[\d+\]\.uuid,
+                    gtmList\[\d+\]\.name,
+                    gmList\[\d+\]\.uuid,
+                    gmList\[\d+\]\.name,
+                    gmList\[\d+\]\.inPriceView,
+                </param>
+            </result>
+            <result name="ajaxGetGmByGtm" type="json">
+                <param name="includeProperties">
+                    gmList\[\d+\]\.uuid,
+                    gmList\[\d+\]\.name,
+                    gmList\[\d+\]\.inPriceView,
+                </param>
+            </result>
+            <result name="ajaxGetGm" type="json">
+                <param name="root">gm</param>
+                <param name="includeProperties">
+                    uuid,
+                    name,
+                    inPriceView,
+
+                </param>
+            </result>
+            <result name="ajaxGetGtmAndGm" type="json">
+                <param name="root">action</param>
+                <param name="includeProperties">
+                    gtmList\[\d+\]\.uuid,
+                    gtmList\[\d+\]\.name,
+                    gmList\[\d+\]\.uuid,
+                    gmList\[\d+\]\.name,
+                    gm\.uuid,
+                    gm\.inPriceView,
+                </param>
+            </result>
+
+
+            <!--sale-->
+
+            <result name="saleList">WEB-INF/jsps/order/sale/saleList.jsp</result>
+            <result name="saleDetail">WEB-INF/jsps/order/sale/saleDetail.jsp</result>
+            <result name="saleInput">WEB-INF/jsps/order/sale/saleInput.jsp</result>
+            <result name="sale" type="redirectAction">order_saleList</result>
+            <result name="ajaxGetGmSale" type="json">
+                <param name="root">
+                    sdmList
+                </param>
+            </result>
+            <result name="ajaxGetGoods" type="json">
+                <param name="root">
+                    gmObj
+                </param>
+            </result>
+
+
+            <!--approve-->
+            <result name="approveList">WEB-INF/jsps/order/buy/approveList.jsp</result>
+        </action>
+
+
+        <action name="approve_*" class="orderAction" method="{1}">
+            <result name="toCheck">WEB-INF/jsps/order/buy/approveDetail.jsp</result>
+            <result name="toApproveList" type="redirectAction">order_approveList.action</result>
+        </action>
+
+        <action name="transport_*" class="orderAction" method="{1}">
+            <result name="transportList">WEB-INF/jsps/order/transport/transportList.jsp</result>
+            <result name="toAssign">WEB-INF/jsps/order/transport/assignTask.jsp</result>
+            <result name="toAssignSale">WEB-INF/jsps/order/transport/assignTaskSale.jsp</result>
+            <result name="toTransportList" type="redirectAction">transport_transportList</result>
+            <result name="taskList">WEB-INF/jsps/order/transport/taskList.jsp</result>
+            <result name="taskListSale">WEB-INF/jsps/order/transport/taskListSale.jsp</result>
+            <result name="taskDetail">WEB-INF/jsps/order/transport/taskDetail.jsp</result>
+            <result name="taskDetailSale">WEB-INF/jsps/order/transport/taskDetailSale.jsp</result>
+            <result name="toTaskList" type="redirectAction">transport_taskList</result>
+            <result name="toTaskListSale" type="redirectAction">transport_taskListSale</result>
+        </action>
+
+        <!--store /last process of order-->
+        <action name="store_*" class="orderAction" method="{1}">
+            <result name="storeIn">WEB-INF/jsps/order/buy/storeList.jsp</result>
+            <result name="inDetail">WEB-INF/jsps/order/buy/storeDetail.jsp</result>
+            <result name="inList">WEB-INF/jsps/order/buy/storeLog.jsp</result>
+            <result name="ajaxIn" type="json">
+                <param name="root">odm</param>
+                <param name="includeProperties">
+                    num,
+                    surPlus
+                </param>
+            </result>
+
+            <result name="storeOut">WEB-INF/jsps/order/sale/storeList.jsp</result>
+            <result name="outDetail">WEB-INF/jsps/order/sale/storeDetail.jsp</result>
+
+        </action>
+
+        <!--storage-->
+        <action name="storage_*" class="storageAction" method="{1}"></action>
+
+        <!--report-->
+        <action name="report_*" class="reportAction" method="{1}">
+            <result name="buyList">WEB-INF/jsps/report/buyList.jsp</result>
+            <result name="ajaxGetGmDetail" type="json">
+                <param name="root">action</param>
+                <param name="includeProperties">
+                    odms\[\d+\]\.om\.orderNum,
+                    odms\[\d+\]\.om\.createTimeView,
+                    odms\[\d+\]\.num,
+                    odms\[\d+\]\.price,
+                </param>
+            </result>
+            <result name="download" type="stream">
+                <param name="contentType">application/vnd.ms-excel;charset=iso-8859-1</param>
+                <param name="inputName">downloadExcelStream</param>
+                <param name="contentDisposition">attachment;filename=${xlsName}</param>
+            </result>
+        </action>
+    </package>
+</struts>

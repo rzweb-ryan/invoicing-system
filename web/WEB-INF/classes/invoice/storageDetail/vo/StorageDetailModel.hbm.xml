@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="invoice.storageDetail.vo.StorageDetailModel" table="tbl_storageDetail">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="num"/>
+        <many-to-one name="gm" column="goodsUuid" class="invoice.goods.vo.GoodsModel"/>
+        <many-to-one name="sm" column="storageUuid" class="invoice.storage.vo.StorageModel"/>
+    </class>
+</hibernate-mapping>

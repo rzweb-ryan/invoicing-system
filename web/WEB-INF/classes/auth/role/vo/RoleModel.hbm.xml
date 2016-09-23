@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        <hibernate-mapping>
+    <class name="auth.role.vo.RoleModel" table="tbl_role">
+        <id name="uuid">
+            <generator class="native"/>
+        </id>
+        <property name="name"/>
+        <property name="code"/>
+        <set name="reses" table="tbl_role_res">
+            <key column="roleUuid"/>
+            <many-to-many column="resUuid" class="auth.res.vo.ResModel"/>
+        </set>
+        <set name="menus" table="tbl_menu_role">
+            <key column="roleUuid"/>
+            <many-to-many column="menuUuid" class="auth.menu.vo.MenuModel"/>
+        </set>
+    </class>
+</hibernate-mapping>

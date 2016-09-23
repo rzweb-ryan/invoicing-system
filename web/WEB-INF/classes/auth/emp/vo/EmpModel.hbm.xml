@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+        <hibernate-mapping>
+    <class name="auth.emp.vo.EmpModel" table="tbl_emp">
+        <id name="uuid">
+            <generator class="native"/>
+        </id>
+        <property name="username"/>
+        <property name="pwd"/>
+        <property name="name"/>
+        <property name="email"/>
+        <property name="tel"/>
+        <property name="address"/>
+        <property name="gender"/>
+        <property name="birthday"/>
+        <property name="lastLoginIp"/>
+        <property name="lastLoginTime"/>
+        <property name="loginTimes"/>
+        <many-to-one name="dm" class="auth.dept.vo.DeptModel" column="deptUuid"/>
+        <set name="roles" table="tbl_emp_role">
+            <key column="empUuid"/>
+            <many-to-many column="roleUuid" class="auth.role.vo.RoleModel"/>
+        </set>
+    </class>
+</hibernate-mapping>

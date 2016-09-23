@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+        '-//Hibernate/Hibernate Mapping DTD 3.0//EN'
+        'http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd'>
+<hibernate-mapping>
+    <class name="invoice.storageLog.vo.StorageLogModel" table="tbl_storageLog">
+        <id name="uuid">
+            <generator class="native" />
+        </id>
+        <property name="num"/>
+        <property name="type"/>
+        <property name="operTime"/>
+        <many-to-one name="em" class="auth.emp.vo.EmpModel" column="empUuid"/>
+        <many-to-one name="sdm" class="invoice.storageDetail.vo.StorageDetailModel" column="sdUuid"/>
+
+    </class>
+</hibernate-mapping>
